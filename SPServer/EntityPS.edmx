@@ -1,0 +1,291 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model.Store" Alias="Self" Provider="System.Data.SqlServerCe.3.5" ProviderManifestToken="3.5" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2006/04/edm/ssdl">
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="AssinaturasSet" EntityType="Model.Store.AssinaturasSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AssinantesSet" EntityType="Model.Store.AssinantesSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="TopicosSet" EntityType="Model.Store.TopicosSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="TitulosSet" EntityType="Model.Store.TitulosSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AssinantesAssinaturas" EntityType="Model.Store.AssinantesAssinaturas" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="AssinaturasTopicos" Association="Model.Store.AssinaturasTopicos">
+      <End Role="Assinaturas" EntitySet="AssinaturasSet" />
+      <End Role="Topicos" EntitySet="TopicosSet" />
+    </AssociationSet>
+    <AssociationSet Name="TopicosTitulos" Association="Model.Store.TopicosTitulos">
+      <End Role="Topicos" EntitySet="TopicosSet" />
+      <End Role="Titulos" EntitySet="TitulosSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AssinantesAssinaturas_Assinantes" Association="Model.Store.FK_AssinantesAssinaturas_Assinantes">
+      <End Role="Assinantes" EntitySet="AssinantesSet" />
+      <End Role="AssinantesAssinaturas" EntitySet="AssinantesAssinaturas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AssinantesAssinaturas_Assinaturas" Association="Model.Store.FK_AssinantesAssinaturas_Assinaturas">
+      <End Role="Assinaturas" EntitySet="AssinaturasSet" />
+      <End Role="AssinantesAssinaturas" EntitySet="AssinantesAssinaturas" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="AssinaturasSet">
+    <Key>
+      <PropertyRef Name="IdAssinatura" />
+    </Key>
+    <Property Name="IdAssinatura" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Lido" Type="bit" Nullable="false" />
+    <Property Name="Nome" Type="nvarchar" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AssinantesSet">
+    <Key>
+      <PropertyRef Name="IdAssinante" />
+    </Key>
+    <Property Name="IdAssinante" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="nvarchar" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TopicosSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="nvarchar" Nullable="false" />
+    <Property Name="Assinaturas_IdAssinatura" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TitulosSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Titulo" Type="nvarchar" Nullable="false" />
+    <Property Name="Texto" Type="nvarchar" Nullable="false" />
+    <Property Name="Topicos_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AssinantesAssinaturas">
+    <Key>
+      <PropertyRef Name="Assinantes_IdAssinante" />
+      <PropertyRef Name="Assinaturas_IdAssinatura" />
+    </Key>
+    <Property Name="Assinantes_IdAssinante" Type="int" Nullable="false" />
+    <Property Name="Assinaturas_IdAssinatura" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="AssinaturasTopicos">
+    <End Role="Assinaturas" Type="Model.Store.AssinaturasSet" Multiplicity="1" />
+    <End Role="Topicos" Type="Model.Store.TopicosSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Assinaturas">
+        <PropertyRef Name="IdAssinatura" />
+      </Principal>
+      <Dependent Role="Topicos">
+        <PropertyRef Name="Assinaturas_IdAssinatura" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="TopicosTitulos">
+    <End Role="Topicos" Type="Model.Store.TopicosSet" Multiplicity="1" />
+    <End Role="Titulos" Type="Model.Store.TitulosSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Topicos">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Titulos">
+        <PropertyRef Name="Topicos_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AssinantesAssinaturas_Assinantes">
+    <End Role="Assinantes" Type="Model.Store.AssinantesSet" Multiplicity="1" />
+    <End Role="AssinantesAssinaturas" Type="Model.Store.AssinantesAssinaturas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Assinantes">
+        <PropertyRef Name="IdAssinante" />
+      </Principal>
+      <Dependent Role="AssinantesAssinaturas">
+        <PropertyRef Name="Assinantes_IdAssinante" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AssinantesAssinaturas_Assinaturas">
+    <End Role="AssinantesAssinaturas" Type="Model.Store.AssinantesAssinaturas" Multiplicity="*" />
+    <End Role="Assinaturas" Type="Model.Store.AssinaturasSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Assinaturas">
+        <PropertyRef Name="IdAssinatura" />
+      </Principal>
+      <Dependent Role="AssinantesAssinaturas">
+        <PropertyRef Name="Assinaturas_IdAssinatura" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2006/04/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Model" Alias="Self" >
+        <EntityContainer Name="ModelContainer" >
+          <EntitySet Name="AssinaturasSet" EntityType="Model.Assinaturas" />
+          <EntitySet Name="AssinantesSet" EntityType="Model.Assinantes" />
+          <EntitySet Name="TopicosSet" EntityType="Model.Topicos" />
+          <EntitySet Name="TitulosSet" EntityType="Model.Titulos" />
+          <AssociationSet Name="AssinaturasTopicos" Association="Model.AssinaturasTopicos">
+            <End Role="Assinaturas" EntitySet="AssinaturasSet" />
+            <End Role="Topicos" EntitySet="TopicosSet" />
+          </AssociationSet>
+          <AssociationSet Name="TopicosTitulos" Association="Model.TopicosTitulos">
+            <End Role="Topicos" EntitySet="TopicosSet" />
+            <End Role="Titulos" EntitySet="TitulosSet" />
+          </AssociationSet>
+          <AssociationSet Name="AssinantesAssinaturas" Association="Model.AssinantesAssinaturas">
+            <End EntitySet="AssinantesSet" Role="Assinantes" />
+            <End EntitySet="AssinaturasSet" Role="Assinaturas" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Assinaturas">
+          <Key>
+            <PropertyRef Name="IdAssinatura" />
+          </Key>
+          <Property Type="Int32" Name="IdAssinatura" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <NavigationProperty Name="Topicos" Relationship="Model.AssinaturasTopicos" FromRole="Assinaturas" ToRole="Topicos" />
+          <Property Type="Boolean" Name="Lido" Nullable="false" />
+          <NavigationProperty Name="Assinantes" Relationship="Model.AssinantesAssinaturas" FromRole="Assinaturas" ToRole="Assinantes" />
+          <Property Type="String" Name="Nome" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Assinantes">
+          <Key>
+            <PropertyRef Name="IdAssinante" />
+          </Key>
+          <Property Type="Int32" Name="IdAssinante" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="String" Name="Nome" Nullable="false" />
+          <NavigationProperty Name="Assinaturas" Relationship="Model.AssinantesAssinaturas" FromRole="Assinantes" ToRole="Assinaturas" />
+        </EntityType>
+        <EntityType Name="Topicos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="String" Name="Nome" Nullable="false" />
+          <NavigationProperty Name="Assinaturas" Relationship="Model.AssinaturasTopicos" FromRole="Topicos" ToRole="Assinaturas" />
+          <NavigationProperty Name="Titulos" Relationship="Model.TopicosTitulos" FromRole="Topicos" ToRole="Titulos" />
+        </EntityType>
+        <EntityType Name="Titulos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Type="String" Name="Titulo" Nullable="false" />
+          <Property Type="String" Name="Texto" Nullable="false" />
+          <NavigationProperty Name="Topicos" Relationship="Model.TopicosTitulos" FromRole="Titulos" ToRole="Topicos" />
+        </EntityType>
+        <Association Name="AssinaturasTopicos">
+          <End Type="Model.Assinaturas" Role="Assinaturas" Multiplicity="1" />
+          <End Type="Model.Topicos" Role="Topicos" Multiplicity="0..1" />
+        </Association>
+        <Association Name="TopicosTitulos">
+          <End Type="Model.Topicos" Role="Topicos" Multiplicity="1" />
+          <End Type="Model.Titulos" Role="Titulos" Multiplicity="*" />
+        </Association>
+        <Association Name="AssinantesAssinaturas">
+          <End Type="Model.Assinantes" Multiplicity="*" Role="Assinantes" />
+          <End Type="Model.Assinaturas" Multiplicity="*" Role="Assinaturas" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="urn:schemas-microsoft-com:windows:storage:mapping:CS">
+  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="ModelContainer">
+    <EntitySetMapping Name="AssinaturasSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.Assinaturas)">
+        <MappingFragment StoreEntitySet="AssinaturasSet">
+          <ScalarProperty Name="IdAssinatura" ColumnName="IdAssinatura" />
+          <ScalarProperty Name="Lido" ColumnName="Lido" />
+          <ScalarProperty Name="Nome" ColumnName="Nome" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AssinantesSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.Assinantes)">
+        <MappingFragment StoreEntitySet="AssinantesSet">
+          <ScalarProperty Name="IdAssinante" ColumnName="IdAssinante" />
+          <ScalarProperty Name="Nome" ColumnName="Nome" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TopicosSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.Topicos)">
+        <MappingFragment StoreEntitySet="TopicosSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Nome" ColumnName="Nome" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TitulosSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.Titulos)">
+        <MappingFragment StoreEntitySet="TitulosSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+          <ScalarProperty Name="Texto" ColumnName="Texto" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="AssinaturasTopicos" TypeName="Model.AssinaturasTopicos" StoreEntitySet="TopicosSet">
+      <EndProperty Name="Assinaturas">
+        <ScalarProperty Name="IdAssinatura" ColumnName="Assinaturas_IdAssinatura" />
+      </EndProperty>
+      <EndProperty Name="Topicos">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="TopicosTitulos" TypeName="Model.TopicosTitulos" StoreEntitySet="TitulosSet">
+      <EndProperty Name="Topicos">
+        <ScalarProperty Name="Id" ColumnName="Topicos_Id" />
+      </EndProperty>
+      <EndProperty Name="Titulos">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="AssinantesAssinaturas" TypeName="Model.AssinantesAssinaturas" StoreEntitySet="AssinantesAssinaturas">
+      <EndProperty Name="Assinantes">
+        <ScalarProperty Name="IdAssinante" ColumnName="Assinantes_IdAssinante" />
+      </EndProperty>
+      <EndProperty Name="Assinaturas">
+        <ScalarProperty Name="IdAssinatura" ColumnName="Assinaturas_IdAssinatura" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2007/06/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram Name="Model2" ZoomLevel="88" >
+        <EntityTypeShape EntityType="Model.Assinaturas" Width="1.5" PointX="7" PointY="0.5" Height="1.9802864583333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Assinantes" Width="1.5" PointX="0.5" PointY="0.5" Height="1.4033821614583333" />
+        <EntityTypeShape EntityType="Model.Topicos" Width="1.5" PointX="6.375" PointY="3.375" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="Model.Titulos" Width="1.5" PointX="2.25" PointY="3.375" Height="1.787985026041667" />
+        <AssociationConnector Association="Model.AssinaturasTopicos" >
+          <ConnectorPoint PointX="7.4375" PointY="2.4802864583333335" />
+          <ConnectorPoint PointX="7.4375" PointY="3.375" />
+        </AssociationConnector>
+        <AssociationConnector Association="Model.TopicosTitulos" >
+          <ConnectorPoint PointX="6.375" PointY="4.2689925130208337" />
+          <ConnectorPoint PointX="3.75" PointY="4.2689925130208337" />
+        </AssociationConnector>
+        <AssociationConnector Association="Model.AssinantesAssinaturas">
+          <ConnectorPoint PointX="2" PointY="1.297841796875" />
+          <ConnectorPoint PointX="7" PointY="1.297841796875" />
+        </AssociationConnector>
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

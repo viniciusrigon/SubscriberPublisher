@@ -1,0 +1,174 @@
+
+-- --------------------------------------------------
+-- Entity Designer DDL Script for SQL Server Compact Edition
+-- --------------------------------------------------
+-- Date Created: 12/12/2011 23:11:08
+-- Generated from EDMX file: D:\Projetos\SubscriberPublisher\SPServer\EntityPS.edmx
+-- --------------------------------------------------
+
+
+-- --------------------------------------------------
+-- Dropping existing FOREIGN KEY constraints
+-- NOTE: if the constraint does not exist, an ignorable error will be reported.
+-- --------------------------------------------------
+
+    ALTER TABLE [TopicosSet] DROP CONSTRAINT [FK_AssinaturasTopicos];
+GO
+    ALTER TABLE [TitulosSet] DROP CONSTRAINT [FK_TopicosTitulos];
+GO
+    ALTER TABLE [AssinantesAssinaturas] DROP CONSTRAINT [FK_AssinantesAssinaturas_Assinantes];
+GO
+    ALTER TABLE [AssinantesAssinaturas] DROP CONSTRAINT [FK_AssinantesAssinaturas_Assinaturas];
+GO
+
+-- --------------------------------------------------
+-- Dropping existing tables
+-- NOTE: if the table does not exist, an ignorable error will be reported.
+-- --------------------------------------------------
+
+    DROP TABLE [AssinaturasSet];
+GO
+    DROP TABLE [AssinantesSet];
+GO
+    DROP TABLE [TopicosSet];
+GO
+    DROP TABLE [TitulosSet];
+GO
+    DROP TABLE [AssinantesAssinaturas];
+GO
+
+-- --------------------------------------------------
+-- Creating all tables
+-- --------------------------------------------------
+
+-- Creating table 'AssinaturasSet'
+CREATE TABLE [AssinaturasSet] (
+    [IdAssinatura] int IDENTITY(1,1) NOT NULL,
+    [Lido] bit  NOT NULL,
+    [Nome] nvarchar(4000)  NOT NULL
+);
+GO
+
+-- Creating table 'AssinantesSet'
+CREATE TABLE [AssinantesSet] (
+    [IdAssinante] int IDENTITY(1,1) NOT NULL,
+    [Nome] nvarchar(4000)  NOT NULL
+);
+GO
+
+-- Creating table 'TopicosSet'
+CREATE TABLE [TopicosSet] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Nome] nvarchar(4000)  NOT NULL,
+    [Assinaturas_IdAssinatura] int  NOT NULL
+);
+GO
+
+-- Creating table 'TitulosSet'
+CREATE TABLE [TitulosSet] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Titulo] nvarchar(4000)  NOT NULL,
+    [Texto] nvarchar(4000)  NOT NULL,
+    [Topicos_Id] int  NOT NULL
+);
+GO
+
+-- Creating table 'AssinantesAssinaturas'
+CREATE TABLE [AssinantesAssinaturas] (
+    [Assinantes_IdAssinante] int  NOT NULL,
+    [Assinaturas_IdAssinatura] int  NOT NULL
+);
+GO
+
+-- --------------------------------------------------
+-- Creating all PRIMARY KEY constraints
+-- --------------------------------------------------
+
+-- Creating primary key on [IdAssinatura] in table 'AssinaturasSet'
+ALTER TABLE [AssinaturasSet]
+ADD CONSTRAINT [PK_AssinaturasSet]
+    PRIMARY KEY ([IdAssinatura] );
+GO
+
+-- Creating primary key on [IdAssinante] in table 'AssinantesSet'
+ALTER TABLE [AssinantesSet]
+ADD CONSTRAINT [PK_AssinantesSet]
+    PRIMARY KEY ([IdAssinante] );
+GO
+
+-- Creating primary key on [Id] in table 'TopicosSet'
+ALTER TABLE [TopicosSet]
+ADD CONSTRAINT [PK_TopicosSet]
+    PRIMARY KEY ([Id] );
+GO
+
+-- Creating primary key on [Id] in table 'TitulosSet'
+ALTER TABLE [TitulosSet]
+ADD CONSTRAINT [PK_TitulosSet]
+    PRIMARY KEY ([Id] );
+GO
+
+-- Creating primary key on [Assinantes_IdAssinante], [Assinaturas_IdAssinatura] in table 'AssinantesAssinaturas'
+ALTER TABLE [AssinantesAssinaturas]
+ADD CONSTRAINT [PK_AssinantesAssinaturas]
+    PRIMARY KEY ([Assinantes_IdAssinante], [Assinaturas_IdAssinatura] );
+GO
+
+-- --------------------------------------------------
+-- Creating all FOREIGN KEY constraints
+-- --------------------------------------------------
+
+-- Creating foreign key on [Assinaturas_IdAssinatura] in table 'TopicosSet'
+ALTER TABLE [TopicosSet]
+ADD CONSTRAINT [FK_AssinaturasTopicos]
+    FOREIGN KEY ([Assinaturas_IdAssinatura])
+    REFERENCES [AssinaturasSet]
+        ([IdAssinatura])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_AssinaturasTopicos'
+CREATE INDEX [IX_FK_AssinaturasTopicos]
+ON [TopicosSet]
+    ([Assinaturas_IdAssinatura]);
+GO
+
+-- Creating foreign key on [Topicos_Id] in table 'TitulosSet'
+ALTER TABLE [TitulosSet]
+ADD CONSTRAINT [FK_TopicosTitulos]
+    FOREIGN KEY ([Topicos_Id])
+    REFERENCES [TopicosSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_TopicosTitulos'
+CREATE INDEX [IX_FK_TopicosTitulos]
+ON [TitulosSet]
+    ([Topicos_Id]);
+GO
+
+-- Creating foreign key on [Assinantes_IdAssinante] in table 'AssinantesAssinaturas'
+ALTER TABLE [AssinantesAssinaturas]
+ADD CONSTRAINT [FK_AssinantesAssinaturas_Assinantes]
+    FOREIGN KEY ([Assinantes_IdAssinante])
+    REFERENCES [AssinantesSet]
+        ([IdAssinante])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [Assinaturas_IdAssinatura] in table 'AssinantesAssinaturas'
+ALTER TABLE [AssinantesAssinaturas]
+ADD CONSTRAINT [FK_AssinantesAssinaturas_Assinaturas]
+    FOREIGN KEY ([Assinaturas_IdAssinatura])
+    REFERENCES [AssinaturasSet]
+        ([IdAssinatura])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_AssinantesAssinaturas_Assinaturas'
+CREATE INDEX [IX_FK_AssinantesAssinaturas_Assinaturas]
+ON [AssinantesAssinaturas]
+    ([Assinaturas_IdAssinatura]);
+GO
+
+-- --------------------------------------------------
+-- Script has ended
+-- --------------------------------------------------
